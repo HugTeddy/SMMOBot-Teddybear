@@ -5,6 +5,7 @@ Please contact me on Discord: `HugTed#6175` for help!
 
 ## Invite
 [Invite Link](https://gluebear.xyz/invite)
+
 Please DM `HugTed#6175` on discord for statistics functions and historical tracking
 
 ## Functions
