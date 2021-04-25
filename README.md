@@ -1,6 +1,10 @@
 # SMMOBot - [KOI] Teddybear
+
+![A test image](https://gluebear.xyz/images/HugTed.gif)
+
 ## About
 Discord bot for stat tracking in SimpleMMO web based text game.
+
 Please contact me on Discord: `HugTed#6175` for help!
 
 ## Invite
@@ -38,3 +42,8 @@ Please DM `HugTed#6175` on discord for statistics functions and historical track
 | Daily Leaderboards | Auto-post daily leaderboards that update hourly! |
 | Guild Activity Tracking | Check guild for non-active users and lower participation users |
 | War System | Track and check status of attackable guilds/players in war, listed in easy to use embeds |
+
+### Screenshots
+![A test image](https://gluebear.xyz/images/Teddybear1.png)
+![A test image](https://gluebear.xyz/images/Teddybear2.png)
+![A test image](https://gluebear.xyz/images/Teddybear3.png)
