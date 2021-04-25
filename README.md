@@ -45,7 +45,7 @@ Please DM `HugTed#6175` on discord for statistics functions and historical track
 
 ### Screenshots
 ##### Profile Embed
-![A test image](https://gluebear.xyz/images/Teddybear1.png)
+![A test image](https://gluebear.xyz/images/Teddybear6.png)
 
 ##### Stats Embed
 ![A test image](https://gluebear.xyz/images/Teddybear2.png)
