@@ -44,6 +44,17 @@ Please DM `HugTed#6175` on discord for statistics functions and historical track
 | War System | Track and check status of attackable guilds/players in war, listed in easy to use embeds |
 
 ### Screenshots
+##### Profile Embed
 ![A test image](https://gluebear.xyz/images/Teddybear1.png)
+
+##### Stats Embed
 ![A test image](https://gluebear.xyz/images/Teddybear2.png)
+
+##### Weekly Graph Embed
 ![A test image](https://gluebear.xyz/images/Teddybear3.png)
+
+##### World Boss Embed
+![A test image](https://gluebear.xyz/images/Teddybear4.png)
+
+##### Orphanage Embed
+![A test image](https://gluebear.xyz/images/Teddybear5.png)
