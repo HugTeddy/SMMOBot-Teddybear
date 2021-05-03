@@ -13,6 +13,7 @@
 | `pat` | Pats another discord user | `~pat @user` |
 | `poke` | Pokes another discord user | `~poke @user` |
 | `wave` | Waves at another discord user | `~wave @user` |
+
 ### General Misc
 | Command | Desc. | Example |
 | -- | -- | -- |
@@ -40,6 +41,7 @@
 
 
 ## Guild SMMO Commands
+### General Commands
 | Command | Desc. | Example |
 | -- | -- | -- |
 | `guildgraph` | Displays graph of guild exp and pvp status | `~guildgraph` |
@@ -51,6 +53,17 @@
 | `guildlinkcheck` | Compares linked players to list of guild mmebers on SMMO, lists linked players that are not in guild | `~guildlinkcheck` |
 | `guildattackcheck <guildid>` | Checks guild for attackable members | `~guildattackcheck 933` |
 
+### Request System
+Allows guild to implement request and tracking system for MoE requests from guild members. This system gives direct send item links as well a logs previous interactions letting guild leaders easily send and track MoE and overall usage.
+
+| Command | Desc. |
+| -- | -- |
+| `~request <amount>` | Makes a new request |
+| `~requestlist` | See pending requests |
+| `~requesttime` | shows current request time |
+| `~requestcomplete <index>` | Completes active request [Guild Manager Only] |
+| `~requesthistory` | shows previous requests [Guild Manager Only] |
+| `~requestcap <amount>` | Caps mushrooms per request [Guild Manager Only] |
 
 ## SMMO World Boss + Orphan Notifications
 These are setup commands for discord channels, some may require `guild manage` permissions in the discord guild.
@@ -62,6 +75,7 @@ These are setup commands for discord channels, some may require `guild manage` p
 | `currentPings [1\|5\|10\|15\|30\|60]` | Checks current setup for guild world boss pings | `~currentPings 1` |
 | `pingHelp` | shows help message for world boss pings  | `~pingHelp` |
 | `wbHelp` | shows help message for world boss setup | `~wbHelp` |
+
 ### Orphanage
 | Command | Desc. | Example |
 | -- | -- | -- |
@@ -74,7 +88,7 @@ These are setup commands for discord channels, some may require `guild manage` p
 ## Bot/User Preferences
 | Command | Desc. |
 | -- | -- |
-| `botInvite` | Displays invite link for this bot 
+| `botInvite` | Displays invite link for this bot
 | `aboutMe` | Displays short aboutme and credits
 | `changeprefix <prefix>` | Changes prefix for all bot commands
 | `toggleEmoji` | Toggles context emojis for user
@@ -84,3 +98,12 @@ These are setup commands for discord channels, some may require `guild manage` p
 | `craftinglist` | Displays craftable items and crafting level
 | `craft <itemname>` | Displays mats needed for crafting
 
+### Profile Customization
+The new Ted Token system allows verified users to customize their personal `~p` menu, including thing such as embed color, avatar, and custom tags.
+To earn tokens, have another verified user `~tip @user`, each user gets one token to tip every 24 hours.
+| Command | Desc. |
+| -- | -- |
+| `tipmenu` | Displays required token amounts for each perk |
+| `tip @user` | Tips another user a Ted Token |
+| `profileimage [imagelink]` | Change embed avatar |
+| `profilecolor [decimalcolor]` | Change embed color, decimal colors e.g. `~profilecolor 1234567` |

@@ -3,14 +3,21 @@
 ![A test image](https://gluebear.xyz/images/HugTed.gif)
 
 ## About
-Discord bot for stat tracking in SimpleMMO web based text game.
+Discord bot designed for guilds and event owners to track/manage SimpleMMO activity of members. This includes guild leaderboards, historical activity tracking, activity graphing, and much more.
 
 Please contact me on Discord: `HugTed#6175` for help!
 
 ## Invite
 [Invite Link](https://gluebear.xyz/invite)
 
-Please DM `HugTed#6175` on discord for statistics functions and historical tracking
+Please DM `HugTed#6175` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
+
+## What's New!
+### Profile Customization
+Verified players can tip other verified players with the `~tip @user` command. These tips can be used to customize one's personal profile page. Including profile page color, profile avatar, custom badges, and more.
+
+### MoE Tracking
+Guilds can opt-in to MoE tracking which lets them use a request system to track member requests for MoE's and log the time when they where given out. This log is then viewable as a historical record.
 
 ## Functions
 ### General Functions
