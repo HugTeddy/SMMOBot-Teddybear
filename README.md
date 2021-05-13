@@ -9,6 +9,7 @@ Please contact me on Discord: `HugTed#6175` for help!
 
 ## Invite
 [Invite Link](https://gluebear.xyz/invite)
+[Website](https://gluebear.xyz/koi/teddybear.html)
 
 Please DM `HugTed#6175` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
 
