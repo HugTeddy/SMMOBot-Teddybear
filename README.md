@@ -1,6 +1,8 @@
 # SMMOBot - [KOI] Teddybear
+[![HugTed - SMMOTeddybear](https://img.shields.io/static/v1?label=HugTed&message=SMMOTeddybear&color=blue&logo=github)](https://github.com/sguo1123/SMMOBot-Teddybear/)
+[![issues - SMMOBot-Teddybear](https://img.shields.io/github/issues/sguo1123/SMMOBot-Teddybear)](https://github.com/sguo1123/SMMOBot-Teddybear/issues)
 
-![A test image](https://gluebear.xyz/images/HugTed.gif)
+[![View site - Website](https://img.shields.io/badge/View_site-GH_Pages-2ea44f?style=for-the-badge)](https://gluebear.xyz/koi/teddybear.html)
 
 ## About
 Discord bot designed for guilds and event owners to track/manage SimpleMMO activity of members. This includes guild leaderboards, historical activity tracking, activity graphing, and much more.
@@ -9,7 +11,6 @@ Please contact me on Discord: `HugTed#6175` for help!
 
 ## Invite
 [Invite Link](https://gluebear.xyz/invite)
-[Website](https://gluebear.xyz/koi/teddybear.html)
 
 Please DM `HugTed#6175` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
 
