@@ -107,3 +107,13 @@ To earn tokens, have another verified user `~tip @user`, each user gets one toke
 | `tip @user` | Tips another user a Ted Token |
 | `profileimage [imagelink]` | Change embed avatar |
 | `profilecolor [decimalcolor]` | Change embed color, decimal colors e.g. `~profilecolor 1234567` |
+
+## Item Searching
+| Command | Desc. |
+| -- | -- |
+| `item <id>` | Shows item with specific ID
+| `itemsearch <filters>` | Displays all items that meet filter requirements
+| `itemsearchfilter` | Shows list of item filters
+
+Filters include: String `type`, Integer `level`, String `rarity`, Integer `stat`, String `stat-type`, Boolean `custom`
+e.g. ``~itemsearch type=weapon, level>100, rarity=legendary, stat<1000, stat-type=str, custom=True`
