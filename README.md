@@ -7,12 +7,12 @@
 ## About
 Discord bot designed for guilds and event owners to track/manage SimpleMMO activity of members. This includes guild leaderboards, historical activity tracking, activity graphing, and much more.
 
-Please contact me on Discord: `HugTed#6175` for help!
+Please contact me on Discord: `HugTed#7154` for help!
 
 ## Invite
 [Invite Link](https://gluebear.xyz/invite)
 
-Please DM `HugTed#6175` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
+Please DM `HugTed#7154` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
 
 ## What's New!
 ### Profile Customization
@@ -36,10 +36,14 @@ Guilds can opt-in to MoE tracking which lets them use a request system to track 
 | World Boss Timer | An easy to use timer for World Bosses to never miss out on trash loot, includes programmable role/user pings. |
 | Orphanage Notifications | Easy to setup notifications for orphanage completions, includes programmable role pings. |
 | SMMO User Search | Look up user ID’s and profiles with simple commands |
+| SMMO Guild Search | Look up guild based on name. |
+| SMMO Item Search | Look up item based on names, type, level, and other characteristics |
 | Profile Linking | Link your own SMMO account to access current data such as HP, gold, Safe Mode, and more! |
 | Item Embeds | Embed select items within Discord using [[ItemName]]. |
 | Attack Simulations | No more guesswork needed, see if you can PvP another player with estimates on Damage and Defense. |
 | Chest Simulations | Take a chance with chests but first, see what possible outcomes you can get. |
+| Wallet Notifications | Get DM'd when you have too many money on your player. |
+| Battle Arena Leaderboards | Get list of top 10 players per battle arena in discord. |
 
 ### SMMO Guild Functions
 | **Feature** | **Description** |
