@@ -14,6 +14,7 @@
 | `poke` | Pokes another discord user | `~poke @user` |
 | `wave` | Waves at another discord user | `~wave @user` |
 
+
 ### General Misc
 | Command | Desc. | Example |
 | -- | -- | -- |
@@ -39,6 +40,8 @@
 | `wallethelp` | Displays help message for wallet commands | `~wallethelp` |
 | `bal` | show battle arena leaderboards based on league | `~bal copper` |
 | `time` | Shows current server time | `~time` |
+| `pc @user` | player card | `~playercard`|
+| `bal <league>` | Shows battle arena leaderboard for various leagues | `~bal copper` |
 
 
 ## Guild SMMO Commands
@@ -55,6 +58,7 @@
 | `guildattackcheck <guildid>` | Checks guild for attackable members | `~guildattackcheck 933` |
 | `guildsync` | Links all guild players with smmoids of username matches | `~guildsync` |
 
+
 ### Request System
 Allows guild to implement request and tracking system for MoE requests from guild members. This system gives direct send item links as well a logs previous interactions letting guild leaders easily send and track MoE and overall usage.
 
@@ -66,9 +70,11 @@ Allows guild to implement request and tracking system for MoE requests from guil
 | `requestcomplete <index>` | Completes active request [Guild Manager Only] |
 | `requesthistory` | shows previous requests [Guild Manager Only] |
 | `requestcap <amount>` | Caps mushrooms per request [Guild Manager Only] |
+| `requesttag @role` | Mentions role when request is added [Guild Manager Only] |
+
 
 ## SMMO World Boss + Orphan Notifications
-These are setup commands for discord channels, some may require `guild manage` permissions in the discord guild.
+These are setup commands for discord channels, some may require `guild_manage` permissions in the discord guild.
 ### World Boss
 | Command | Desc. | Example |
 | -- | -- | -- |
@@ -77,6 +83,7 @@ These are setup commands for discord channels, some may require `guild manage` p
 | `currentPings [1\|5\|10\|15\|30\|60]` | Checks current setup for guild world boss pings | `~currentPings 1` |
 | `pingHelp` | shows help message for world boss pings  | `~pingHelp` |
 | `wbHelp` | shows help message for world boss setup | `~wbHelp` |
+
 
 ### Orphanage
 | Command | Desc. | Example |
@@ -100,6 +107,9 @@ These are setup commands for discord channels, some may require `guild manage` p
 | `craftinglist` | Displays craftable items and crafting level
 | `craft <itemname>` | Displays mats needed for crafting
 
+
+
+## Other Systems
 ### Profile Customization
 The new Ted Token system allows verified users to customize their personal `~p` menu, including thing such as embed color, avatar, and custom tags.
 To earn tokens, have another verified user `~tip @user`, each user gets one token to tip every 24 hours.
@@ -110,7 +120,8 @@ To earn tokens, have another verified user `~tip @user`, each user gets one toke
 | `profileimage [imagelink]` | Change embed avatar |
 | `profilecolor [decimalcolor]` | Change embed color, decimal colors e.g. `~profilecolor 1234567` |
 
-## Item Searching
+
+### Item Searching
 | Command | Desc. |
 | -- | -- |
 | `item <id>` | Shows item with specific ID
@@ -118,4 +129,13 @@ To earn tokens, have another verified user `~tip @user`, each user gets one toke
 | `itemsearchfilter` | Shows list of item filters
 
 Filters include: String `type`, Integer `level`, String `rarity`, Integer `stat`, String `stat-type`, Boolean `custom`
-e.g. ``~itemsearch type=weapon, level>100, rarity=legendary, stat<1000, stat-type=str, custom=True`
+e.g. ``~itemsearch --type=weapon --level>100 --rarity=legendary --stat<1000 --stat-type=str --custom=True``
+
+
+### Item Collector
+Collectors can list their collected items and other information on the bot for quick access and advertising! You must be `~verified` to add to the list. You can search for items with `~is "item name"`.
+| Command | Desc. |
+| -- | -- |
+| `~collect <itemid> <item price per unit>` | sets up new collection |
+| `~removecollect <listid>` | removes your own entries. |
+| `~collectlist` | list currently collected items. |
