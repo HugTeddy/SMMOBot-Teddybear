@@ -37,6 +37,7 @@
 | `top <daily\|weekly>` | Top 3 List All Groups (Levels, Quests, Pvp, Npc) | `~top` or `~top weekly` |
 | `top10 <daily\|weekly> <steps\|pvp\|npc\|levels>` | Top 10 List | `~top10 daily pvp` or `~top10 weekly steps` |
 | `wallethelp` | Displays help message for wallet commands | `~wallethelp` |
+| `bal` | show battle arena leaderboards based on league | `~bal copper` |
 | `time` | Shows current server time | `~time` |
 
 
@@ -52,18 +53,19 @@
 | `guildlinkmissing` | Compares linked players to list of guild members on SMMO, lists missing players | `~guildlinkmissing` |
 | `guildlinkcheck` | Compares linked players to list of guild mmebers on SMMO, lists linked players that are not in guild | `~guildlinkcheck` |
 | `guildattackcheck <guildid>` | Checks guild for attackable members | `~guildattackcheck 933` |
+| `guildsync` | Links all guild players with smmoids of username matches | `~guildsync` |
 
 ### Request System
 Allows guild to implement request and tracking system for MoE requests from guild members. This system gives direct send item links as well a logs previous interactions letting guild leaders easily send and track MoE and overall usage.
 
 | Command | Desc. |
 | -- | -- |
-| `~request <amount>` | Makes a new request |
-| `~requestlist` | See pending requests |
-| `~requesttime` | shows current request time |
-| `~requestcomplete <index>` | Completes active request [Guild Manager Only] |
-| `~requesthistory` | shows previous requests [Guild Manager Only] |
-| `~requestcap <amount>` | Caps mushrooms per request [Guild Manager Only] |
+| `request <amount>` | Makes a new request |
+| `requestlist` | See pending requests |
+| `requesttime` | shows current request time |
+| `requestcomplete <index>` | Completes active request [Guild Manager Only] |
+| `requesthistory` | shows previous requests [Guild Manager Only] |
+| `requestcap <amount>` | Caps mushrooms per request [Guild Manager Only] |
 
 ## SMMO World Boss + Orphan Notifications
 These are setup commands for discord channels, some may require `guild manage` permissions in the discord guild.
