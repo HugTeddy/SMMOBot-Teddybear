@@ -14,6 +14,12 @@
 | `poke` | Pokes another discord user | `~poke @user` |
 | `wave` | Waves at another discord user | `~wave @user` |
 
+### Player Games
+| Command | Desc. | Example |
+| -- | -- | -- |
+| `deathroll @user bet` | Starts a game of death roll with another user | `~dr @HugTed 1 Potato` |
+| `dice @user bet` | Starts a game of dice with another user | `~dice @HugTed 1 Potato` |
+| `coinflip @user bet` | Starts a game of coin flip with another user | `~cf @HugTed 1 Potato` |
 
 ### General Misc
 | Command | Desc. | Example |
