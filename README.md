@@ -56,7 +56,12 @@ Guilds can opt-in to MoE tracking which lets them use a request system to track 
 | Guild Activity Tracking | Check guild for non-active users and lower participation users |
 | War System | Track and check status of attackable guilds/players in war, listed in easy to use embeds |
 
-### Screenshots
+## Privacy/Data
+Players may request their account data and historical data be removed from our databases: 
+1. Making an issue [here](https://github.com/sguo1123/SMMOBot-Teddybear/issues)
+2. Contacting HugTed#7154 through discord and requesting data removal
+
+## Screenshots
 ##### Profile Embed
 ![A test image](https://gluebear.xyz/images/Teddybear6.png)
 
