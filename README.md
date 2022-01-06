@@ -1,6 +1,7 @@
 # SMMOBot - [KOI] Teddybear
 [![HugTed - SMMOTeddybear](https://img.shields.io/static/v1?label=HugTed&message=SMMOTeddybear&color=blue&logo=github)](https://github.com/sguo1123/SMMOBot-Teddybear/)
 [![issues - SMMOBot-Teddybear](https://img.shields.io/github/issues/sguo1123/SMMOBot-Teddybear)](https://github.com/sguo1123/SMMOBot-Teddybear/issues)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsguo1123%2FSMMOBot-Teddybear&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 [![View site - Website](https://img.shields.io/badge/View_site-GH_Pages-2ea44f?style=for-the-badge)](https://simplemmo.me/)
 
@@ -15,6 +16,9 @@ Please contact me on Discord: `HugTed#7154` for help!
 Please DM `HugTed#7154` on discord for statistics functions and historical tracking. Due to data collection and storage concerns, tracking functions requiring data storage will require initial setup sequence.
 
 ## What's New!
+### Cosmetic Quizzes
+Verifier players can take short multiple choice quizzes to access various cosmetics and other customization options. Check out `~dc` to get stared.
+
 ### Profile Customization
 Verified players can tip other verified players with the `~tip @user` command. These tips can be used to customize one's personal profile page. Including profile page color, profile avatar, custom badges, and more.
 
