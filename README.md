@@ -1,7 +1,7 @@
 # SMMOBot - [KOI] Teddybear
 [![HugTed - SMMOTeddybear](https://img.shields.io/static/v1?label=HugTed&message=SMMOTeddybear&color=blue&logo=github)](https://github.com/sguo1123/SMMOBot-Teddybear/)
 [![issues - SMMOBot-Teddybear](https://img.shields.io/github/issues/sguo1123/SMMOBot-Teddybear)](https://github.com/sguo1123/SMMOBot-Teddybear/issues)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsguo1123%2FSMMOBot-Teddybear&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Hits&edge_flat=false)](https://hits.seeyoufarm.com)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsguo1123%2FSMMOBot-Teddybear&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Hits&edge_flat=false)](https://simplemmo.me/)
 
 [![View site - Website](https://img.shields.io/badge/View_site-GH_Pages-2ea44f?style=for-the-badge)](https://simplemmo.me/)
 
