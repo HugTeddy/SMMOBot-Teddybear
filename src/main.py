@@ -106,7 +106,7 @@ async def on_command_error(ctx, error):
         await ctx.message.add_reaction("❌")
     else:
         await ctx.message.add_reaction("❓")
-        await ctx.send('An error occured, if persistant please contact <@151819430026936320>.')
+        await ctx.send('An error occurred, if persistant please contact <@151819430026936320>.')
         embed = discord.Embed(title=':x: Command Error', colour=0xe74c3c)
         embed.add_field(name='Error', value=error)
         embed.add_field(name='Author', value=str(ctx.author.name))
