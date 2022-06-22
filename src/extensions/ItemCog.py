@@ -1,15 +1,35 @@
+import configparser
 import discord
+import pytz
 from discord.ext import tasks, commands
-import sqlite3
+from datetime import date, datetime
+from PIL import Image
+from io import BytesIO
+import requests
+import html
 import re
 import json
 from extensions.BlacklistCog import checkBlacklist
+from extensions.DatabaseCog import discordLookup
 from disputils import BotEmbedPaginator
+import mysql.connector
+from discord_components import (
+    DiscordComponents,
+    Button,
+    ButtonStyle,
+    Select,
+    SelectOption,
+)
 
 dir = CURRENT_WORKING_DIRECTORY
-con = sqlite3.connect(f'{dir}/data/items/smmo.db')
-cur = con.cursor()
-regexmatch=["[[", "]]"]
+config = configparser.ConfigParser()
+config.read(f'{dir}/config.ini')
+API_KEY = config.get('DEFAULT', 'Api_Key')
+mysql_host = config.get('MYSQL', 'host')
+mysql_user = config.get('MYSQL', 'user')
+mysql_password = config.get('MYSQL', 'pwd')
+
+regexmatch = ["[[", "]]"]
 
 with open(f'{dir}/blacklist/items.txt', 'r') as f:
     blacklist = json.load(f)
@@ -17,10 +37,142 @@ with open(f'{dir}/blacklist/items.txt', 'r') as f:
 with open(f'{dir}/blacklist/guild_items.txt', 'r') as f:
     guild_blacklist = json.load(f)
 
-def getIndex(row:int):
-    cur.execute(f'SELECT * FROM Items WHERE "ItemID"={row}')
-    data = cur.fetchall()[0]
+
+def createSQLCommand(lib):
+    res_lib = dict(lib)
+
+    res_lib["name"] = lib["name"].replace("\"", "\\\"")
+
+    if lib["description"] and len(lib["description"]) != 0:
+        res_lib["description"] = lib["description"].replace("\"", "\\\"")
+    else:
+        del res_lib["description"]
+
+    del res_lib["image_url"]
+    res_lib["image"] = lib["image_url"]
+
+    del res_lib["market"]
+    res_lib["pmin"] = lib["market"]["low"]
+    res_lib["pmax"] = lib["market"]["high"]
+
+    del res_lib["custom_item"]
+    res_lib["custom"] = lib["custom_item"]
+    if res_lib["custom"] == 1:
+        res_lib["obtainable"] = 1
+
+    res_lib["equipable"] = int(lib["equipable"])
+    res_lib["circulation"] = int(lib["circulation"])
+
+    del res_lib["stat1"]
+    del res_lib["stat2"]
+    del res_lib["stat3"]
+    del res_lib["stat1modifier"]
+    del res_lib["stat2modifier"]
+    del res_lib["stat3modifier"]
+
+    if lib["stat1"] != None:
+        if lib["stat1"] == "str":
+            res_lib["strength"] = lib["stat1modifier"]
+        elif lib["stat1"] == "def":
+            res_lib["defense"] = lib["stat1modifier"]
+        elif lib["stat1"] == "crit":
+            res_lib["critical"] = lib["stat1modifier"]
+        elif lib["stat1"] == "hp":
+            res_lib["health"] = lib["stat1modifier"]
+
+    if lib["stat2"] != None:
+        if lib["stat2"] == "str":
+            res_lib["strength"] = lib["stat2modifier"]
+        elif lib["stat2"] == "def":
+            res_lib["defense"] = lib["stat2modifier"]
+        elif lib["stat2"] == "crit":
+            res_lib["critical"] = lib["stat2modifier"]
+        elif lib["stat2"] == "hp":
+            res_lib["health"] = lib["stat2modifier"]
+
+    if lib["stat3"] != None:
+        if lib["stat3"] == "str":
+            res_lib["strength"] = lib["stat3modifier"]
+        elif lib["stat3"] == "def":
+            res_lib["defense"] = lib["stat3modifier"]
+        elif lib["stat3"] == "crit":
+            res_lib["critical"] = lib["stat3modifier"]
+        elif lib["stat3"] == "hp":
+            res_lib["health"] = lib["stat3modifier"]
+
+    res_lib["created_at"] = datetime.now(pytz.timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')
+    res_lib["updated_at"] = datetime.now(pytz.timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')
+
+    command_list = []
+    col_list = []
+    col_data = []
+
+    for data in res_lib.keys():
+        if type(res_lib[data]) == str:
+            if data != "created_at":
+                command_list.append(f'{data}=\"{res_lib[data]}\"')
+            col_list.append(str(data))
+            col_data.append(f'\"{res_lib[data]}\"')
+        else:
+            command_list.append(f"{data}={res_lib[data]}")
+            col_list.append(str(data))
+            col_data.append(f'{res_lib[data]}')
+
+    cmd_string = ",".join(command_list)
+    col_string = ",".join(col_list)
+    data_string = ",".join(col_data)
+    command = f'INSERT INTO Items2 ({col_string}) VALUES ({data_string}) ON DUPLICATE KEY UPDATE {cmd_string};'
+    print(command)
+    return command
+
+
+def getIndex(row: int):
+    mydb = mysql.connector.connect(
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        database="smmo"
+    )
+    mycursor = mydb.cursor()
+    mycursor.execute(f'SELECT * FROM Items2 WHERE id={row}')
+    data = mycursor.fetchall()[0]
+    mydb.close()
     return data
+
+
+async def getUpdateList(itemid):
+    mydb = mysql.connector.connect(
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        database="smmo"
+    )
+    mycursor = mydb.cursor()
+    mycursor.execute(f'SELECT name FROM Items2 WHERE id={itemid}')
+    cur_data = mycursor.fetchall()
+    if len(cur_data) > 0:
+        return True
+    else:
+        return False
+
+
+async def checkSupporter(ctx):
+    mydb = mysql.connector.connect(
+        host=mysql_host,
+        user=mysql_user,
+        password=mysql_password,
+        database="smmo"
+    )
+    mycursor = mydb.cursor()
+    mycursor.execute(f'SELECT smmoID FROM Users WHERE discordID={ctx.author.id}')
+    cur_data = mycursor.fetchall()
+    if len(cur_data) > 0:
+        smmoID = cur_data[0]
+        with open(f'{dir}/data/tags/donator.txt', 'r') as f:
+            smmo_data = json.load(f)
+        if smmoID in smmo_data:
+            return True
+    return True
 
 
 async def paginate(ctx, embeds):
@@ -28,41 +180,35 @@ async def paginate(ctx, embeds):
     await paginator.run()
 
 
-def createItemListEmbed(data):
-    index = 0
-    embeds = []
-    chunks = [data[x:x+10] for x in range(0, len(data), 10)]
-    for ilist in chunks:
-        output = ""
-        for item in ilist:
-            output += f'[[{int(item[0])}](https://web.simple-mmo.com/item/inspect/{int(item[0])}?new_page=true)] {item[1]} - Level {int(item[5])}\n'
-        embed = discord.Embed(
-            title="Item Search Results",
-            description=output,
-            color=152162
-        )
-        embeds.append(embed)
-    return embeds
-
-
 def createItemEmbed(data):
     attributes = ""
-    index = [8,10,12]
-    colors = {"Common":discord.Color.light_grey(), "Uncommon": discord.Color.blue(), "Rare": discord.Color.orange(), "Elite": discord.Color.red(), "Epic": discord.Color.blurple(), "Legendary": discord.Color.from_rgb(255,255,0), "Celestial": discord.Color.from_rgb(0,255,255)}
+    colors = {"Common": discord.Color.light_grey(), "Uncommon": discord.Color.blue(), "Rare": discord.Color.orange(),
+              "Elite": discord.Color.red(), "Epic": discord.Color.blurple(),
+              "Legendary": discord.Color.from_rgb(255, 255, 0), "Celestial": discord.Color.from_rgb(0, 255, 255)}
     if data[6] in colors.keys():
         color = colors[data[6]]
     else:
         color = discord.Color.default()
-    for i in index:
-        if data[i] != "none":
-            if data[i] == "crit":
-                attributes += f' {data[i]} +{data[i+1]}%'
-            elif data[i] != None:
-                attributes += f' {data[i]} +{format(int(data[i+1]), ",d")}'
+    if data[8] != None:
+        attributes += f"hp +{data[8]} "
+    if data[9] != None:
+        attributes += f"str +{data[9]} "
+    if data[10] != None:
+        attributes += f"def +{data[10]} "
+    if data[11] != None:
+        attributes += f"crit +{data[11] / 10}% "
+
+    if data[3] not in ["none", None, "0", 0, ""]:
+        desc = html.unescape(data[3])
+    else:
+        desc = "No Description"
+
+    last_update = round(data[22].replace(tzinfo=pytz.timezone('US/Eastern')).astimezone(tz=None).timestamp())
+
     embed = discord.Embed(
-        title=data[1],
-        url='https://web.simple-mmo.com/item/inspect/'+ f'{int(data[0])}' + f'?new_page=true',
-        description=f'SMMO Item ID: {int(data[0])}\nLast Updated: <t:{data[22]}:f>\nDescription: {data[3]}',
+        title=html.unescape(data[1]),
+        url='https://simplemmo.me/mobile?page=item/inspect/' + f'{int(data[0])}' + f'?new_page=true',
+        description=f'SMMO Item ID: {int(data[0])}\nLast Updated: <t:{last_update}:f>\nDescription: *{desc}*',
         color=color
     )
     if data[2] == "Background":
@@ -70,22 +216,31 @@ def createItemEmbed(data):
     else:
         embed.set_thumbnail(url=f"https://web.simple-mmo.com{data[17]}")
     embed.add_field(name='Type', value=f'{data[2]}', inline=True)
-    embed.add_field(name='Level', value=f'{format(int(data[4]), ",d")}', inline=True)
-    embed.add_field(name='Required Level', value=f'{format(int(data[4]), ",d")}', inline=True)
+    if data[4] is None:
+        data[4] = 0
+    embed.add_field(name='Level', value=f'{format(int(data[5]), ",d")}', inline=True)
+    embed.add_field(name='Required Level', value=f'{format(int(data[5]), ",d")}', inline=True)
     embed.add_field(name='Rarity', value=f'{data[6]}', inline=True)
-    embed.add_field(name='Value',value=f'{format(int(data[7]), ",d")}', inline=True)
+    if data[7] is None:
+        data[7] = 0
+    embed.add_field(name='Value', value=f'{format(int(data[7]), ",d")}', inline=True)
+    if data[18] is None:
+        data[18] = 0
     embed.add_field(name='Circulation', value=f'{format(int(data[18]), ",d")} Items', inline=True)
-    embed.add_field(name='Market', value=f'{format(int(data[19]), ",d")} Items', inline=True)
-    embed.add_field(name='Market Value', value=f'{format(int(data[20]), ",d")} - {format(int(data[21]), ",d")} Gold', inline=True)
-    if int(data[14]) == 0:
+    if data[19] is None:
+        data[19] = 0
+    if data[20] is None:
+        data[20] = 0
+    embed.add_field(name='Market Value', value=f'{format(int(data[19]), ",d")} to {format(int(data[20]), ",d")} Gold',
+                    inline=True)
+    if int(data[12]) == 0:
         embed.add_field(name='Custom', value=f'❌', inline=True)
     else:
         embed.add_field(name='Custom', value=f'✅', inline=True)
-    if attributes == "":
-        embed.add_field(name='Attributes', value=f'`N/A`', inline=True)
-    else:
+    if attributes != "":
         embed.add_field(name='Attributes', value=f'{attributes}', inline=True)
     return embed
+
 
 class ItemCog(commands.Cog):
     def __init__(self, client):
@@ -95,10 +250,6 @@ class ItemCog(commands.Cog):
     async def on_message(self, message):
         if message.guild is None or message.author is None:
             return
-        if message.author.id in blacklist:
-            return
-        if message.guild.id in guild_blacklist:
-            return
         global itemlist
         global regexmatch
         embeds = []
@@ -107,24 +258,70 @@ class ItemCog(commands.Cog):
         items = []
         if all(x in msg for x in regexmatch):
             items = re.findall('(?<=\[\[)(.*?)(?=\]\])', msg)
-            for iName in items:
-                iName=iName.lower()
-                cur.execute(f'SELECT * FROM Items WHERE LOWER("Name")="{iName}"')
-                results = cur.fetchall()
-                if len(results) > 0:
-                    embed = createItemEmbed(results[0])
-                    embeds.append(embed)
-            if len(embeds) == 0:
+            if items[0].lower() == "market":
+                smmoid = discordLookup(message.author.id)
+                if smmoid != -1:
+                    await message.channel.send(f"{message.author.mention}'s Market", components=[
+                        Button(style=5, label="Market",
+                               url=f'https://web.simple-mmo.com/market/listings?user_id={smmoid}&new_page=true')])
+                else:
+                    await message.channel.send("Unable to find linked account, please `~verify`", delete_after=10)
                 return
-            if len(embeds) == 1:
-                await message.channel.send(embed=embeds[0])
+            elif items[0].lower() in ["myavatar", "myava", "ava"]:
+                smmoid = discordLookup(message.author.id)
+                if smmoid != -1:
+                    with open(f'{dir}/datalog/{date.today()}.txt', 'r') as f:
+                        userdata = json.load(f)
+                    if str(smmoid) in userdata.keys():
+                        pilImage = Image.open(
+                            requests.get(f'https://web.simple-mmo.com{userdata[str(smmoid)]["avatar"]}',
+                                         stream=True).raw)
+                        if pilImage.size[0] < 50:
+                            pilImage = pilImage.resize((pilImage.size[0] * 4, pilImage.size[1] * 4), Image.ANTIALIAS)
+                        else:
+                            pilImage = pilImage.resize((pilImage.size[0] * 3, pilImage.size[1] * 3), Image.ANTIALIAS)
+                        with BytesIO() as image_binary:
+                            pilImage.save(image_binary, 'GIF')
+                            image_binary.seek(0)
+                            await message.channel.send(file=discord.File(fp=image_binary, filename='avatar.gif'))
+                else:
+                    await message.channel.send("Unable to find linked account, please `~verify`", delete_after=10)
+                return
             else:
-                await paginate(ctx, embeds)
+                if message.author.id in blacklist:
+                    return
+                if message.guild.id in guild_blacklist:
+                    return
+
+                mydb = mysql.connector.connect(
+                    host=mysql_host,
+                    user=mysql_user,
+                    password=mysql_password,
+                    database="smmo"
+                )
+                mycursor = mydb.cursor()
+                for iName in items:
+                    iName = html.escape(iName.lower(), quote=True).replace("&#x27;", "&#039;")
+                    mycursor.execute(f'SELECT * FROM Items2 WHERE LOWER(name)="{iName}"')
+                    results = mycursor.fetchall()
+                    if len(results) > 0:
+                        if results[0][12] == 0:
+                            embed = createItemEmbed(results[0])
+                        else:
+                            embed = createItemEmbed(results[-1])
+                        embeds.append(embed)
+                mydb.close()
+                if len(embeds) == 0:
+                    return
+                if len(embeds) == 1:
+                    await message.channel.send(embed=embeds[0])
+                else:
+                    await paginate(ctx, embeds)
 
     @commands.command()
     @commands.check(checkBlacklist)
-    async def item(self, ctx, id:int):
-        if id <= 0 or id >= 60000:
+    async def item(self, ctx, id: int):
+        if id <= 0 or id >= 100000:
             await ctx.send("Unable to locate item.")
             await ctx.message.add_reaction("❌")
             return
@@ -141,95 +338,14 @@ class ItemCog(commands.Cog):
     @commands.command(aliases=["isf"])
     @commands.check(checkBlacklist)
     async def itemSearchFilter(self, ctx):
-        await ctx.send(f'Filters include: String `type`, Integer `level`, String `rarity`, Integer `stat`, String `stat-type`, Boolean `custom`\ne.g. `~itemsearch "itemname" --type=weapon --rarity=common --stat=1000 --stat-type=str --custom=false`')
+        await ctx.send("Please check out: https://smmo-db.com/items/search")
         await ctx.message.add_reaction("✅")
 
     @commands.command(aliases=["is"])
     @commands.check(checkBlacklist)
-    async def itemSearch(self, ctx, *, query:str):
-        custom = -1
-        keywords = ["type", "level", "rarity", "stat", "stat-type"]
-        raritytypes = ["common", "uncommon", "elite", "rare", "legendary", "celestial", "exotic"]
-        stattypes = ["str", "def", "crit", "hp"]
-        querylist = []
-        itemname = ""
-
-        if query.count("\"") == 2:
-            itemname = "'%"+ re.search(r'\"(.+?)\"', query)[0][1:-1].strip() + "%'"
-            resquery = query.split("\"")[2]
-        elif query.count("\"") >= 2:
-            await ctx.send('Unable to parse query. Please use keywords to phrase query\ni.e. `~itemsearch "itemname" --type=weapon --rarity=common --stat=1000 --stat-type=str --custom=false`')
-            await ctx.message.add_reaction("❌")
-            return
-        else:
-            resquery = query
-
-        if "--" in resquery:
-            restrictions = query.strip().replace(" ", "").lower().split("--")
-        elif "--" not in resquery and itemname == "":
-            await ctx.send('Unable to parse query. Please use keywords to phrase query\ni.e. `~itemsearch "itemname" --type=weapon --rarity=common --stat=1000 --stat-type=str --custom=false`')
-            await ctx.message.add_reaction("❌")
-            return
-        else:
-            restrictions = []
-        if len(restrictions) != 0:
-            for restriction in restrictions:
-                if restriction.startswith("rarity"):
-                    if restriction.split("=")[1] not in raritytypes:
-                        continue
-                    else:
-                        querylist.append(f'LOWER("Rarity")="{restriction[7:]}"')
-                elif restriction.startswith("type"):
-                    querylist.append(f'LOWER("Type")="{restriction[5:]}"')
-                elif restriction.startswith("stat-type"):
-                    if restriction.split("=")[1] not in stattypes:
-                        continue
-                    else:
-                        querylist.append(f'LOWER("Stat1")="{restriction[10:]}"')
-                elif restriction.startswith("level"):
-                    querylist.append(f'"Level"{restriction[5]}"{restriction[6:]}"')
-                elif restriction.startswith("stat"):
-                    if any(substring in restriction for substring in [">=", "<="]):
-                        querylist.append(f'"Stat1-Value"{restriction[4:5]}"{restriction[6:]}"')
-                    else:
-                        querylist.append(f'"Stat1-Value"{restriction[4]}"{restriction[5:]}"')
-                elif restriction.startswith("custom"):
-                    if restriction[7:] == "true":
-                        querylist.append(f'"Custom"=1')
-                        custom = 1
-                else:
-                    continue
-        if custom == -1:
-            querylist.append(f'"Custom"=0')
-
-        if itemname != "" and len(restrictions) != 0:
-            final_query = f'SELECT * FROM Items WHERE "name" LIKE {itemname} AND ' + ' AND '.join(querylist)
-        elif itemname != "" :
-            final_query = f'SELECT * FROM Items WHERE "name" LIKE {itemname} AND "Custom"=0'
-        else:
-            final_query = f'SELECT * FROM Items WHERE ' + ' AND '.join(querylist)
-        try:
-            cur.execute(final_query)
-            results = cur.fetchall()
-            if len(results) == 0:
-                await ctx.send("No Items Found")
-                await ctx.message.add_reaction("❌")
-                return
-            elif len(results) == 1:
-                embed = createItemEmbed(results[0])
-                await ctx.send(embed=embed)
-                await ctx.message.add_reaction("✅")
-            else:
-                embeds = createItemListEmbed(results)
-                if len(embeds) >= 1:
-                    await paginate(ctx, embeds)
-                else:
-                    await ctx.send(embed=embed)
-                await ctx.message.add_reaction("✅")
-        except Exception as e:
-            print(f'ItemCog - {e}')
-            await ctx.message.add_reaction("❌")
-            return
+    async def itemSearch(self, ctx, *, query: str):
+        await ctx.send("Please check out: https://smmo-db.com/items/search")
+        await ctx.message.add_reaction("✅")
 
     @commands.command()
     @commands.check(checkBlacklist)
@@ -259,6 +375,7 @@ class ItemCog(commands.Cog):
 
         with open(f'{dir}/blacklist/guild_items.txt', 'w') as f:
             json.dump(guild_blacklist, f)
+
 
 def setup(client):
     client.add_cog(ItemCog(client))
