@@ -1,14 +1,11 @@
-import discord
 import configparser
-import random
 import json
-import math
-import time
 import os
 import traceback
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
+from discord import app_commands
+import discord
 from discord.ext import commands
-from discord_components import DiscordComponents, Button
 
 def get_prefix(client, message):
     with open('prefix.txt', 'r') as f:
@@ -21,6 +18,7 @@ def get_prefix(client, message):
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 client = commands.Bot(command_prefix=get_prefix, case_insensitive=True, intents=intents)
 
@@ -35,8 +33,8 @@ async def reload(ctx, extension):
     if ctx.message.author.id != bot_owner:
         await ctx.send('Nice Try')
         return
-    client.unload_extension(f'extensions.{extension}')
-    client.load_extension(f'extensions.{extension}')
+    await client.unload_extension(f'extensions.{extension}')
+    await client.load_extension(f'extensions.{extension}')
     await ctx.message.add_reaction("✅")
 
 @client.command()
@@ -44,7 +42,7 @@ async def load(ctx, extension):
     if ctx.message.author.id != bot_owner:
         await ctx.send('Nice Try')
         return
-    client.load_extension(f'extensions.{extension}')
+    await client.load_extension(f'extensions.{extension}')
     await ctx.message.add_reaction("✅")
 
 @client.command()
@@ -52,19 +50,30 @@ async def unload(ctx, extension):
     if ctx.message.author.id != bot_owner:
         await ctx.send('Nice Try')
         return
-    client.unload_extension(f'extensions.{extension}')
+    await client.unload_extension(f'extensions.{extension}')
     await ctx.message.add_reaction("✅")
 
 @client.event
 async def on_ready():
-    DiscordComponents(client)
     await client.change_presence(
         activity=discord.Activity(
-            name='Life', type=discord.ActivityType.competing))
+            name='SimpleMMO', type=discord.ActivityType.competing))
+    channel = client.get_channel(00000000000000000000)
+    await channel.send("[🟢] Bot Connected")
+    print('Bot is ready.')
+
+@client.command()
+async def loadCogs(ctx):
+    if ctx.message.author.id != bot_owner:
+        await ctx.send('Missing Permissions')
+        return
     for filename in os.listdir('./extensions'):
         if filename.endswith('.py'):
-            client.load_extension(f'extensions.{filename[:-3]}')
-    print('Bot is ready.')
+            try:
+                await client.load_extension(f'extensions.{filename[:-3]}')
+            except:
+                await ctx.send(f'Error Loading: {filename}')
+    await ctx.message.add_reaction("✅")
 
 @client.event
 async def on_guild_join(guild):
@@ -104,9 +113,14 @@ async def on_command_error(ctx, error):
         await ctx.send('Incorrect Parameters', delete_after=5)
     elif isinstance(error, commands.CheckFailure):
         await ctx.message.add_reaction("❌")
+    elif isinstance(error, OSError):
+        await ctx.message.add_reaction("❌")
+        if datetime.now().hour == 0:
+            await ctx.send('Data is processing for SimpleMMO daily reset... Please try again later.', delete_after=10)
+        else:
+            await ctx.send('Data has not yet loaded... Please try again later.', delete_after=10)
     else:
-        await ctx.message.add_reaction("❓")
-        await ctx.send('An error occurred, if persistant please contact <@151819430026936320>.')
+        await ctx.send('An error occurred, if persistent please check out our Discord Support Server `^aboutme`.', delete_after=60)
         embed = discord.Embed(title=':x: Command Error', colour=0xe74c3c)
         embed.add_field(name='Error', value=error)
         embed.add_field(name='Author', value=str(ctx.author.name))
@@ -114,8 +128,10 @@ async def on_command_error(ctx, error):
             embed.add_field(name='Guild', value=str(ctx.guild.name))
         embed.description = '```py\n%s\n```' % traceback.format_exc()
         embed.timestamp = datetime.utcnow()
-        AppInfo = await client.application_info()
-        await AppInfo.owner.send(embed=embed)
+        with open("/home/teddybear/errorlog/errors.txt", "a") as f:
+            f.write(f'{error}\n')
+        app_info = await client.application_info()
+        await app_info.owner.send(embed=embed)
 
 @client.event
 async def on_error(event, *args, **kwargs):
@@ -157,4 +173,13 @@ async def guildList(ctx):
             output = ""
     await ctx.send(output)
 
+@commands.command()
+async def syncCommands(ctx):
+    if ctx.author.id == bot_owner:
+        await client.tree.sync()
+        await ctx.message.add_reaction("✅")
+    else:
+        await ctx.send("Error")
+
 client.run(token)
+

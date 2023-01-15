@@ -1,1 +1,0 @@
-[{"id": 562, "name": "EXAMPLE", "avatar": "bosses/15", "level": 874, "god": 0, "str": 665, "def": 1195, "dex": 906, "current_hp": 33063715, "max_hp": 33063715, "enable_time": 1632126735}]

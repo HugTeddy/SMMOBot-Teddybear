@@ -1,18 +1,4 @@
 ## General Commands
-### Emotes
-| Command | Desc. | Example |
-| -- | -- | -- |
-| `bunny` | Displays random bunny picture | `~bunny` |
-| `cat` | Displays random cat picture | `~cat` |
-| `dog` | Displays random dog picture | `~dog` |
-| `duck` | Displays random duck picture | `~duck` |
-| `deer` | Displays random deer picture | `~deer` |
-| `poke` | pokes another discord user | `~poke @user` |
-| `kill` | Kills another discord user | `~kill @user` |
-| `kiss` | Kisss another discord user | `~kiss @user` |
-| `pat` | Pats another discord user | `~pat @user` |
-| `poke` | Pokes another discord user | `~poke @user` |
-| `wave` | Waves at another discord user | `~wave @user` |
 
 ### Player Games
 | Command | Desc. | Example |
@@ -20,6 +6,12 @@
 | `deathroll @user bet` | Starts a game of death roll with another user | `~dr @HugTed 1 Potato` |
 | `dice @user bet` | Starts a game of dice with another user | `~dice @HugTed 1 Potato` |
 | `coinflip @user bet` | Starts a game of coin flip with another user | `~cf @HugTed 1 Potato` |
+| `farm` | Lets player farm plants/fruits for Teddybear Credit | `~farmhelp` |
+| `wordle` | Lets player guess a word of the day and recieve credit for correct letters | `~wordlehelp` |
+| `egg` | Hatch a random pet by stepping in SimpleMMO | `~egghelp` |
+| `memory` | Try and get all the coordinates for different items before time runs out | `~memhelp` |
+| `cook` | Cook a variety of dishes to get Teddybear Credit | `~cookhelp` |
+
 
 ### General Misc
 | Command | Desc. | Example |
@@ -110,6 +102,7 @@ These are setup commands for discord channels, some may require `guild_manage` p
 | `toggleGuildEmoji` | Toggles context emojis for guild
 | `toggleItems` | Toggles context items for user
 | `toggleGuildItems` | Toggles context items for guild
+| `toggleGuildShortItems` | Toggles short item context mode
 | `craftinglist` | Displays craftable items and crafting level
 | `craft <itemname>` | Displays mats needed for crafting
 
@@ -127,21 +120,11 @@ To earn tokens, have another verified user `~tip @user`, each user gets one toke
 | `profilecolor [decimalcolor]` | Change embed color, decimal colors e.g. `~profilecolor 1234567` |
 
 
-### Item Searching
+### Item Database & Chat Embeds
 | Command | Desc. |
 | -- | -- |
 | `item <id>` | Shows item with specific ID
-| `itemsearch <filters>` | Displays all items that meet filter requirements
-| `itemsearchfilter` | Shows list of item filters
-
-Filters include: String `type`, Integer `level`, String `rarity`, Integer `stat`, String `stat-type`, Boolean `custom`
-e.g. ``~itemsearch --type=weapon --level>100 --rarity=legendary --stat<1000 --stat-type=str --custom=True``
-
-
-### Item Collector
-Collectors can list their collected items and other information on the bot for quick access and advertising! You must be `~verified` to add to the list. You can search for items with `~is "item name"`.
-| Command | Desc. |
-| -- | -- |
-| `~collect <itemid> <item price per unit>` | sets up new collection |
-| `~removecollect <listid>` | removes your own entries. |
-| `~collectlist` | list currently collected items. |
+| `[[item name]]` | Displays item information in detail
+| `[!item name!]` | Displays item art 
+| `[[myava]]` | Displays player avatar
+| `[[market]]` | Displayer player market link

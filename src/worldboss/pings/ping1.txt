@@ -1,1 +1,0 @@
-{"DISCORD_GUILD_ID": {"user": [DISCORD_USER_ID], "role": [DISCORD_ROLE_ID]}}

@@ -1,5 +1,4 @@
 eval7==0.1.9
-discord_components==0.5.3
 plotly==4.14.3
 simpleeval==0.9.10
 lxml==4.6.2
@@ -11,8 +10,7 @@ sympy==1.8
 wolframalpha==4.1.1
 numpy==1.19.4
 discord_webhook==0.11.0
-discord_py_slash_command==1.0.9.5
-discord.py==1.5.1
+discord.py==2.0
 webcolors==1.11.1
 requests==2.22.0
 beautifulsoup4==4.9.3
